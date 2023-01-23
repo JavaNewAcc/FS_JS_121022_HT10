@@ -1,0 +1,36 @@
+$color_white: #fff;
+
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+    transition: all 0.4s ease;
+}
+
+a:hover {
+    color: orange;
+}
+
+.additional_task {
+    font-size: 0.8rem;
+}
+
+.regWinBg {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.regWin {
+    position: fixed;
+    background-color: rgb(8, 8, 8);
+    color: $color_white;
+}
