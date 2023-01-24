@@ -102,14 +102,45 @@ window.onload = function () {
             regBtn.style.backgroundColor = "RGB(98,0,237)";
             regBtn.style.borderRadius = '15px';
             regBtn.style.color = '#fff';
-            regBtn.classList.add('btn', 'mt-5');
-            form.appendChild(regBtn);
+            regBtn.classList.add('btn', 'm-3');
+            regWin.appendChild(regBtn);
             regBtn.addEventListener('click', function () {
-                if (error) { console.log("Please fill all fields properly") }
+                let emptyFields = 0;
+                let redFields = 0;
+                [...form.children].forEach(formElement => {
+                    if (formElement.value == "") {
+                        emptyFields++;
+                    }
+                    if (formElement.style.borderColor == 'red') {
+                        redFields++;
+                    }
+                });
+                if (emptyFields > 0) { alert('Заповніть всі поля') }
+                else if (redFields > 0) { alert('Перевірті введені данні') }
+                else if (formPassword.value != formPasswordConf.value) { alert('Паролі не співпадаюсь') }
                 else {
-                    console.log("Form sumitted");
-                    setTimeout(formOpen, 3000);
-                }
+                    [...form.children].forEach(formElement => {
+                        formElement.style.display = 'none';
+                    })
+                    regBtn.style.display = 'none';
+                    signInBtn.style.display = 'none';
+                    let successMsg = document.createElement('p');
+                    successMsg.classList.add('text-center');
+                    successMsg.innerText = 'Реєстрація пройшла успішно';
+                    form.appendChild(successMsg);
+                    let closeBtn = document.createElement('button');
+                    closeBtn.innerText = 'Вийти';
+                    closeBtn.style.backgroundColor = "RGB(98,0,237)";
+                    closeBtn.style.borderRadius = '15px';
+                    closeBtn.style.color = '#fff';
+                    closeBtn.classList.add('btn');
+                    form.appendChild(closeBtn);
+                    closeBtn.addEventListener('click', function () {
+                        regWin.removeChild(form);
+                        regWinBg.style.display = 'none';
+                        regFormExist = false;
+                    })
+                };
             });
 
             let signInBtn = document.createElement('button');
@@ -117,9 +148,9 @@ window.onload = function () {
             signInBtn.style.backgroundColor = "RGB(55,0,179)";
             signInBtn.style.borderRadius = '15px';
             signInBtn.style.color = '#fff';
-            signInBtn.classList.add('btn', 'mt-3', 'mb-3');
-            form.appendChild(signInBtn);
-            signInBtn.addEventListener('click', function () { })
+            signInBtn.classList.add('btn', 'ms-3', 'me-3', 'mb-3');
+            regWin.appendChild(signInBtn);
+            signInBtn.addEventListener('click', function () { alert('Тут поки що ниічого немає') })
 
             onFocusOut(formFullName);
             emailOnly(formEmail);
@@ -190,11 +221,9 @@ window.onload = function () {
         element.addEventListener('focusout', function () {
             if (element.value == '') {
                 element.style.borderColor = 'red';
-                error = true;
             }
             else {
                 element.style.borderColor = 'green';
-                error = false
             }
         })
     }
@@ -207,7 +236,6 @@ window.onload = function () {
             let numCounter = 0;
             if (element.value == '') {
                 element.style.borderColor = 'red';
-                error = true;
             }
             else {
                 let [...elemArr] = element.value;
@@ -220,12 +248,12 @@ window.onload = function () {
                         errorPhoneMsg.innerText = 'Введіть тільки цифри';
                         element.after(errorPhoneMsg);
                         element.style.borderColor = 'red';
-                        error = true;
                     }
                     else {
-                        element.parentElement.removeChild(document.querySelector('#errorPhoneMsg'));
+                        if (document.querySelector('#errorPhoneMsg') != null) {
+                            element.parentElement.removeChild(errorPhoneMsg);
+                        }
                         element.style.borderColor = 'green';
-                        error = false;
                     }
                 })
             }
@@ -237,72 +265,36 @@ window.onload = function () {
         errorEmailMsg.classList.add('p-0', 'm-0');
         errorEmailMsg.id = 'errorEmailMsg';
         element.addEventListener('focusout', function () {
-            // let errorCounter = 0;
             let dogCounter = 0;
             if (element.value == '') {
                 element.style.borderColor = 'red';
-                error = true;
-            } else if ([...element.value].indexOf('@') == -1) {
-                errorEmailMsg.innerText = 'Введіть вірний емейл';
-                element.after(errorEmailMsg);
-                element.style.borderColor = 'red';
-                error = true;
             }
             else {
-                [...element].value.forEach(arrElement => {
-                    if (arrElement == "@") {
-                        dogCounter++;
-                    }
-                    if (dogCounter > 0) {
+                if (element.value.indexOf('@') == -1) {
+                    errorEmailMsg.innerText = 'Введіть вірний емейл';
+                    element.after(errorEmailMsg);
+                    element.style.borderColor = 'red';
+                }
+                else {
+                    [...element.value].forEach(arrElement => {
+                        if (arrElement == "@") {
+                            dogCounter++;
+                        }
+                    })
+                    if (dogCounter > 1) {
                         errorEmailMsg.innerText = 'Введіть вірний емейл';
                         element.after(errorEmailMsg);
                         element.style.borderColor = 'red';
-                        error = true;
                     }
                     else {
-                        if (error) { element.parentElement.removeChild(errorEmailMsg); }
+                        if (document.querySelector('#errorEmailMsg') != null) {
+                            element.parentElement.removeChild(errorEmailMsg);
+                        }
                         element.style.borderColor = 'green';
                         dogCounter = 0;
-                        error = false;
                     }
-                });
+                }
             }
-
         })
     }
 }
-
-
-//             else if ([...element.value].indexOf('@') == -1) {
-//         if (errorCounter == 0) {
-//             errorEmailMsg.innerText = 'Введіть вірний емейл';
-//             element.after(errorEmailMsg);
-//             element.style.borderColor = 'red';
-//             errorCounter++;
-//             error = true;
-//         }
-//     }
-//     else {
-//         [...element.value].forEach(arrElement => {
-//             if (arrElement == "@") { dogCounter++ }
-//         });
-
-//         if (dogCounter > 1) {
-//             if (errorCounter == 0) {
-//                 errorEmailMsg.innerText = 'Введіть вірний емейл';
-//                 element.after(errorEmailMsg);
-//                 element.style.borderColor = 'red';
-//                 errorCounter++;
-//                 error = true;
-//             }
-//         }
-//         else {
-//             element.parentElement.removeChild(errorEmailMsg);
-//             element.style.borderColor = 'green';
-//             dogCounter = 0;
-//             error = false;
-//         }
-//     }
-// })
-// }
-// }
