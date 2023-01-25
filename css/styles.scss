@@ -34,3 +34,9 @@ a:hover {
     background-color: rgb(8, 8, 8);
     color: $color_white;
 }
+
+.prodElement>p,
+.form-check-label,
+.dropdown-menu {
+    font-size: 12px;
+}
