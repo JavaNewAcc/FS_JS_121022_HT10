@@ -8,12 +8,14 @@ window.onload = () => {
 
     let moveFieldExist = false;
     let moveField;
+    let moveDiv;
+
     startBtn.addEventListener('click', () => {
         if (!moveFieldExist) {
             moveFieldExist = true;
             moveField = document.createElement('div');
-            moveField.style.height = '75vw';
-            moveField.style.width = '90vh';
+            moveField.style.height = '75vh';
+            moveField.style.width = '90vw';
             moveField.style.backgroundColor = 'RGBA(0,0,0,0.25)';
             moveField.style.position = 'relative';
             moveField.classList.add('m-auto', 'mt-2', 'mb-2');
@@ -22,10 +24,12 @@ window.onload = () => {
             startBtn.scrollIntoView();
 
             moveDiv = document.createElement('div');
-            moveDiv.style.height = '25px';
-            moveDiv.style.width = '25px';
+            moveDiv.style.height = '50px';
+            moveDiv.style.width = '50px';
+            moveDiv.style.left = '0px';
             moveDiv.style.background = 'yellow';
             moveDiv.id = 'moveDiv';
+            moveDiv.style.position = 'absolute';
             moveDiv.style.display = 'flex';
             moveField.appendChild(moveDiv);
 
@@ -34,15 +38,12 @@ window.onload = () => {
 
         else {
             moveField.parentElement.removeChild(moveField);
-            startBtn.innerText = 'Start moving yellow DIV';
+            startBtn.innerText = 'Start moving yellow block';
             moveFieldExist = false;
         }
-        console.log(moveField)
     })
 
     let stepSize = 10;
-    let startPosition = 0;
-
 
     document.addEventListener('keydown', (e) => {
         if (moveFieldExist) {
@@ -66,22 +67,49 @@ window.onload = () => {
         }
     })
 
+
     function moveRight(step) {
-        console.log(event.key);
+        let moveElem = document.querySelector('#moveDiv');
+        if ((moveElem.offsetLeft + moveDiv.clientWidth + step) > moveElem.parentElement.clientWidth) {
+            moveElem.parentElement.animate([{ boxShadow: '7px 0 5px -3px red' },
+            { boxShadow: '0px 0 0px -3px red' }], 500);
+        }
+        else {
+            moveElem.style.left = (moveElem.offsetLeft + step) + 'px';
+        }
     }
 
     function moveLeft(step) {
-        console.log(event.key);
+        let moveElem = document.querySelector('#moveDiv');
+        if (moveElem.offsetLeft <= 0) {
+            moveElem.parentElement.animate([{ boxShadow: '-7px 0 5px -3px red' },
+            { boxShadow: '0px 0 0px -3px red' }], 500);
+        }
 
+        else {
+            moveElem.style.left = (moveElem.offsetLeft - step) + 'px';
+        }
     }
 
     function moveUp(step) {
-        console.log(event.key);
-
+        let moveElem = document.querySelector('#moveDiv');
+        if (moveElem.offsetTop <= 0) {
+            moveElem.parentElement.animate([{ boxShadow: '0px -7px 5px -3px red' },
+            { boxShadow: '0px 0 0px -3px red' }], 500);
+        }
+        else {
+            moveElem.style.top = (moveElem.offsetTop - step) + 'px';
+        }
     }
 
     function moveDown(step) {
-        console.log(event.key);
-
+        let moveElem = document.querySelector('#moveDiv');
+        if ((moveElem.offsetTop + moveDiv.clientWidth + step) > moveElem.parentElement.clientHeight) {
+            moveElem.parentElement.animate([{ boxShadow: '0px 7px 5px -3px red' },
+            { boxShadow: '0px 0 0px -3px red' }], 500);
+        }
+        else {
+            moveElem.style.top = (moveElem.offsetTop + step) + 'px';
+        }
     }
 }
